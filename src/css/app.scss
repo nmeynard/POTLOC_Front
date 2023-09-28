@@ -1,1 +1,34 @@
-// app global css in SCSS form
+@font-face {
+  font-family: "Source Sans 3";
+  src: url("SourceSans3-VariableFont_wght.ttf") format("truetype");
+  font-weight: 200 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Source Sans 3";
+  src: url("SourceSans3-Italic-VariableFont_wght.ttf") format("truetype");
+  font-weight: 200 900;
+  font-style: italic;
+}
+
+html,
+body,
+p {
+  font-family: "Source Sans 3", sans-serif;
+  font-weight: 400; /* Utilisation d'une valeur normale. Vous pouvez la modifier pour obtenir des poids différents. */
+}
+
+h1 {
+  font-weight: 800; /* Plus gras */
+}
+
+em {
+  font-style: italic; /* Italique */
+}
+
+@for $i from 2 through 9 {
+  .fw-#{$i}00 {
+    font-weight: $i * 100;
+  }
+}

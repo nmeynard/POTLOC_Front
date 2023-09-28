@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { ref, onMounted, computed } from "vue";
 import { useQuasar } from "quasar";
 import axios from "axios";
+import { createConsumer } from "@rails/actioncable";
 
 export const useMainStore = defineStore("main", () => {
   const $q = useQuasar();
@@ -16,6 +17,17 @@ export const useMainStore = defineStore("main", () => {
   });
   const shoeStores = ref([]);
   const shoeModels = ref([]);
+
+  const consumer = createConsumer("ws://127.0.0.1:3000/cable");
+  consumer.subscriptions.create(
+    { channel: "WsEventsChannel" },
+    {
+      received(data) {
+        console.log("WsEvents received", data);
+        wsEvents.value.push(data);
+      },
+    }
+  );
 
   async function getWsEvents() {
     try {

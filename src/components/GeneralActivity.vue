@@ -1,5 +1,6 @@
 <script setup>
 import { useMainStore } from "src/stores/main-store";
+
 const mainStore = useMainStore();
 const props = defineProps({ wsEvents: Array });
 </script>

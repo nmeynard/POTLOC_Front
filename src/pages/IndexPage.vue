@@ -1,7 +1,6 @@
 <script setup>
 import { ref, computed } from "vue";
 import { useQuasar } from "quasar";
-import { createConsumer } from "@rails/actioncable";
 import CustomSeparator from "src/components/CustomSeparator.vue";
 import GeneralActivity from "src/components/GeneralActivity.vue";
 import GeneralShopActivity from "src/components/GeneralShopActivity.vue";
@@ -16,17 +15,6 @@ const wsEvents = computed({
     $q.localStorage.set("wsEvents", data);
   },
 });
-
-const consumer = createConsumer("ws://127.0.0.1:3000/cable");
-consumer.subscriptions.create(
-  { channel: "WsEventsChannel" },
-  {
-    received(data) {
-      console.log("WsEvents received", data);
-      wsEvents.value.push(data);
-    },
-  }
-);
 </script>
 <template>
   <q-page class="q-pa-md">

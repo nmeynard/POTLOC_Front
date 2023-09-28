@@ -56,33 +56,103 @@ export const useMainStore = defineStore("main", () => {
   });
 
   const salesByStores = computed(() => {
-    if (wsEvents.value.length) {
+    if (wsEvents.value.length && shoeStores.value.length) {
       const result = [];
-      for (const store of shoeStores) {
+      for (const store of shoeStores.value) {
         const storeObject = {
           name: store.name,
-          sales: wsEvents.value.filter((x) => x.store_id === store.id),
+          sales: wsEvents.value.filter((x) => x.shoe_store_id === store.id),
         };
+        result.push(storeObject);
       }
       return result;
     } else {
-      return 0;
+      return [];
     }
   });
 
-  // const bestStorePerformer = computed(() => {
-  //   if (wsEvents.value.length) {
-  //   } else {
-  //     return {};
-  //   }
-  // });
+  const bestStorePerformer = computed(() => {
+    let result = { name: "N/A", sales: 0 };
+    if (salesByStores.value.length) {
+      const bestPerformer = salesByStores.value.sort(
+        (a, b) => b.sales.length - a.sales.length
+      )[0];
+      if (bestPerformer) {
+        result.name = bestPerformer.name;
+        result.sales = bestPerformer.sales.length;
+      }
+    }
+    return result;
+  });
+
+  const bestModelPerformer = computed(() => {
+    let result = "N/A";
+    if (wsEvents.value.length && shoeModels.value.length) {
+      const modelIdCount = {};
+      wsEvents.value.map((x) => (modelIdCount[x.shoe_model_id] = 0));
+      wsEvents.value.map((x) => modelIdCount[x.shoe_model_id]++);
+      const bestPerformer = Object.entries(modelIdCount).sort(
+        (a, b) => b[1] - a[1]
+      )[0][0];
+      result = shoeModels.value.find(
+        (x) => x.id === parseInt(bestPerformer)
+      ).name;
+    }
+    return result;
+  });
+
+  const stockLast10 = computed(() => {
+    let result = { higher: "N/A", lower: "N/A" };
+    if (
+      wsEvents.value.length &&
+      shoeModels.value.length &&
+      shoeStores.value.length
+    ) {
+      const last10 = wsEvents.value
+        .sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at))
+        .slice(0, 10);
+      const higherStock = last10.sort((a, b) => b.qty_left - a.qty_left)[0];
+      const lowerStock = last10.sort((a, b) => a.qty_left - b.qty_left)[0];
+      console.log("higherStock", higherStock);
+      console.log("lowerStock", lowerStock);
+      result.higher = `${higherStock.qty_left} ${
+        shoeModels.value.find(
+          (x) => x.id === parseInt(higherStock.shoe_model_id)
+        ).name
+      } - ${
+        shoeStores.value.find(
+          (x) => x.id === parseInt(higherStock.shoe_store_id)
+        ).name
+      }`;
+      result.lower = `${lowerStock.qty_left} ${
+        shoeModels.value.find(
+          (x) => x.id === parseInt(lowerStock.shoe_model_id)
+        ).name
+      } - ${
+        shoeStores.value.find(
+          (x) => x.id === parseInt(lowerStock.shoe_store_id)
+        ).name
+      }`;
+    }
+    return result;
+  });
 
   onMounted(async () => {
     await getShoeStores();
     await getShoeModels();
     await getWsEvents();
-    console.log("salesByStores", salesByStores.value);
   });
 
-  return { shoeStores, shoeModels, wsEvents, wsEventsCount };
+  setTimeout(console.log("salesByStores", salesByStores.value), 5000);
+
+  return {
+    shoeStores,
+    shoeModels,
+    wsEvents,
+    wsEventsCount,
+    salesByStores,
+    bestStorePerformer,
+    bestModelPerformer,
+    stockLast10,
+  };
 });

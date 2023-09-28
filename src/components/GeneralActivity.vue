@@ -30,7 +30,9 @@ const props = defineProps({ wsEvents: Array });
             ><q-card-section class="text-center">
               <p class="text-caption q-my-none">Magasin le plus performant</p>
               <p class="fw-700 text-accent q-mb-none text-body1">
-                ALDO Destiny USA Mall
+                {{ mainStore.bestStorePerformer?.name }} ({{
+                  mainStore.bestStorePerformer?.sales
+                }})
               </p>
             </q-card-section>
           </q-card>
@@ -39,7 +41,9 @@ const props = defineProps({ wsEvents: Array });
           <q-card class="fit"
             ><q-card-section class="text-center">
               <p class="text-caption q-my-none">Modèle le plus performant</p>
-              <p class="fw-700 text-accent q-mb-none text-body1">CADAUDIA</p>
+              <p class="fw-700 text-accent q-mb-none text-body1">
+                {{ mainStore.bestModelPerformer }}
+              </p>
             </q-card-section>
           </q-card>
         </div>
@@ -51,10 +55,10 @@ const props = defineProps({ wsEvents: Array });
           <q-card class="fit"
             ><q-card-section>
               <p class="text-caption q-my-none text-center">
-                Stock le plus haut
+                Stock le plus haut (10 derniers events)
               </p>
               <p class="fw-700 text-positive q-mb-none text-body1 text-center">
-                87x CADAUDIA - ALDO Destiny USA Mall
+                {{ mainStore.stockLast10?.higher }}
               </p>
             </q-card-section>
           </q-card>
@@ -63,10 +67,10 @@ const props = defineProps({ wsEvents: Array });
           <q-card class="fit"
             ><q-card-section>
               <p class="text-caption q-my-none text-center">
-                Stock le plus bas
+                Stock le plus bas (10 derniers events)
               </p>
               <p class="fw-700 text-negative q-mb-none text-body1 text-center">
-                87x CADAUDIA - ALDO Destiny USA Mall
+                {{ mainStore.stockLast10?.lower }}
               </p>
             </q-card-section>
           </q-card>

@@ -1,8 +1,21 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import { useQuasar } from "quasar";
 import { createConsumer } from "@rails/actioncable";
+import CustomSeparator from "src/components/CustomSeparator.vue";
+import GeneralActivity from "src/components/GeneralActivity.vue";
+import GeneralShopActivity from "src/components/GeneralShopActivity.vue";
+import GeneralShoeActivity from "src/components/GeneralShoeActivity.vue";
 
-const wsEvents = ref([]);
+const $q = useQuasar();
+const wsEvents = computed({
+  get() {
+    return $q.localStorage.getItem("wsEvents") || [];
+  },
+  set(data) {
+    $q.localStorage.set("wsEvents", data);
+  },
+});
 
 const consumer = createConsumer("ws://127.0.0.1:3000/cable");
 consumer.subscriptions.create(
@@ -10,36 +23,23 @@ consumer.subscriptions.create(
   {
     received(data) {
       console.log("WsEvents received", data);
+      wsEvents.value.push(data);
     },
   }
 );
-
-// const socket = new WebSocket("ws://localhost:3000/cable");
-
-// socket.onopen = (event) => {
-//   console.log("socket is open", event);
-//   const msg = {
-//     command: "subscribe",
-//     identifier: JSON.stringify({
-//       channel: "ws_events",
-//     }),
-//   };
-//   socket.send(JSON.stringify(msg));
-// };
-
-// socket.onmessage = (event) => {
-//   const message = JSON.parse(event.data);
-//   console.log("New message received", event);
-//   wsEvents.value.push(message);
-// };
 </script>
 <template>
-  <q-page class="flex flex-center">
-    <div>
-      <!-- Utilisez wsEvents.value pour accéder aux données dans le template -->
-      <div v-for="event in wsEvents" :key="event.id">
-        {{ event }}
-      </div>
+  <q-page class="q-pa-md">
+    <div class="full-width">
+      <CustomSeparator :sep-title="'Activité générale'" />
+      <GeneralActivity :ws-events="wsEvents" />
+      <CustomSeparator :sep-title="'Vue générale par magasin'" />
+      <GeneralShopActivity />
+      <CustomSeparator
+        :sep-title="'Vue générale par modèle de chaussure'"
+        class="q-mt-md"
+      />
+      <GeneralShoeActivity />
     </div>
   </q-page>
 </template>

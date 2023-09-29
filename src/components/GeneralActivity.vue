@@ -1,8 +1,11 @@
 <script setup>
 import { useMainStore } from "src/stores/main-store";
+import { storeToRefs } from "pinia";
 
 const mainStore = useMainStore();
 const props = defineProps({ wsEvents: Array });
+
+const { bestStorePerformer, bestModelPerformer } = storeToRefs(mainStore);
 </script>
 <template>
   <div class="row q-mt-none q-mb-md q-col-gutter-md">
@@ -31,9 +34,7 @@ const props = defineProps({ wsEvents: Array });
             ><q-card-section class="text-center">
               <p class="text-caption q-my-none">Magasin le plus performant</p>
               <p class="fw-700 text-accent q-mb-none text-body1">
-                {{ mainStore.bestStorePerformer?.name }} ({{
-                  mainStore.bestStorePerformer?.sales
-                }})
+                {{ bestStorePerformer.name }} ({{ bestStorePerformer.sales }})
               </p>
             </q-card-section>
           </q-card>
@@ -43,7 +44,7 @@ const props = defineProps({ wsEvents: Array });
             ><q-card-section class="text-center">
               <p class="text-caption q-my-none">Modèle le plus performant</p>
               <p class="fw-700 text-accent q-mb-none text-body1">
-                {{ mainStore.bestModelPerformer }}
+                {{ bestModelPerformer }}
               </p>
             </q-card-section>
           </q-card>

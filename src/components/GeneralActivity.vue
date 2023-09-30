@@ -1,11 +1,8 @@
 <script setup>
-import { useMainStore } from "src/stores/main-store";
-import { storeToRefs } from "pinia";
+import { useShoeStore } from "src/stores/shoes-store";
 
-const mainStore = useMainStore();
+const shoeStore = useShoeStore();
 const props = defineProps({ wsEvents: Array });
-
-const { bestStorePerformer, bestModelPerformer } = storeToRefs(mainStore);
 </script>
 <template>
   <div class="row q-mt-none q-mb-md q-col-gutter-md">
@@ -34,7 +31,9 @@ const { bestStorePerformer, bestModelPerformer } = storeToRefs(mainStore);
             ><q-card-section class="text-center">
               <p class="text-caption q-my-none">Magasin le plus performant</p>
               <p class="fw-700 text-accent q-mb-none text-body1">
-                {{ bestStorePerformer.name }} ({{ bestStorePerformer.sales }})
+                {{ shoeStore.bestPerformerStore?.name }} ({{
+                  shoeStore.bestPerformerStore?.sales
+                }})
               </p>
             </q-card-section>
           </q-card>
@@ -44,7 +43,9 @@ const { bestStorePerformer, bestModelPerformer } = storeToRefs(mainStore);
             ><q-card-section class="text-center">
               <p class="text-caption q-my-none">Modèle le plus performant</p>
               <p class="fw-700 text-accent q-mb-none text-body1">
-                {{ bestModelPerformer }}
+                {{ shoeStore.bestPerformerModel?.name }} ({{
+                  shoeStore.bestPerformerModel?.sales
+                }})
               </p>
             </q-card-section>
           </q-card>
@@ -59,9 +60,9 @@ const { bestStorePerformer, bestModelPerformer } = storeToRefs(mainStore);
               <p class="text-caption q-my-none text-center">
                 Stock le plus haut (10 derniers events)
               </p>
-              <p class="fw-700 text-positive q-mb-none text-body1 text-center">
-                {{ mainStore.stockLast10?.higher }}
-              </p>
+              <p
+                class="fw-700 text-positive q-mb-none text-body1 text-center"
+              ></p>
             </q-card-section>
           </q-card>
         </div>
@@ -71,9 +72,9 @@ const { bestStorePerformer, bestModelPerformer } = storeToRefs(mainStore);
               <p class="text-caption q-my-none text-center">
                 Stock le plus bas (10 derniers events)
               </p>
-              <p class="fw-700 text-negative q-mb-none text-body1 text-center">
-                {{ mainStore.stockLast10?.lower }}
-              </p>
+              <p
+                class="fw-700 text-negative q-mb-none text-body1 text-center"
+              ></p>
             </q-card-section>
           </q-card>
         </div>

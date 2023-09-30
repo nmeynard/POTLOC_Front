@@ -51,6 +51,22 @@ export const useShoeStore = defineStore("shoe", () => {
     return results;
   });
 
+  const bestModelByStores = computed(() => {
+    let results = {};
+    for (const store of stores) {
+      const inventory = computedByStores.value[store];
+      if (inventory) {
+        const bestModel = Object.entries(inventory)
+          .map((x) => {
+            return { name: x[0], ...x[1] };
+          })
+          .sort((a, b) => b.salesCount - a.salesCount)[0];
+        results[store] = bestModel;
+      }
+    }
+    return results;
+  });
+
   function parseResults(store) {
     const modelTemplate = {};
     for (const model of models) {
@@ -79,25 +95,31 @@ export const useShoeStore = defineStore("shoe", () => {
       receivedAt: Date.now(),
       ...JSON.parse(event.data),
     });
+    $q.localStorage.set("ws-events", wsEvents.value);
   };
 
   socket.onerror = function (error) {
     console.error("WebSocket Error", error);
   };
 
-  const bestPerformerStore = computed(() => {
-    let result = { name: "N/A", sales: 0 };
+  const storesOrderedBySales = computed(() => {
     const storeScoring = {};
     for (const store of stores) {
       storeScoring[store] = wsEvents.value.filter(
         (x) => x.store === store
       ).length;
     }
-    const bestPerformer = Object.entries(storeScoring).sort(
+    const bestPerformers = Object.entries(storeScoring).sort(
       (a, b) => b[1] - a[1]
-    )[0];
-    result.name = bestPerformer[0];
-    result.sales = bestPerformer[1];
+    );
+    return bestPerformers;
+  });
+
+  const bestPerformerStore = computed(() => {
+    let result = { name: "N/A", sales: 0 };
+    const bestPerformers = storesOrderedBySales.value;
+    result.name = bestPerformers[0][0];
+    result.sales = bestPerformers[0][1];
     return result;
   });
 
@@ -116,5 +138,29 @@ export const useShoeStore = defineStore("shoe", () => {
     return result;
   });
 
-  return { wsEvents, computedByStores, bestPerformerStore, bestPerformerModel };
+  const ChartStorePerfData = computed(() => {
+    const storeScoring = [];
+    for (const store of stores) {
+      storeScoring.push({
+        name: store,
+        sales: 0,
+      });
+    }
+    wsEvents.value.map((x) => {
+      storeScoring.find((y) => y.name === x.store).sales++;
+    });
+    return storeScoring.filter((x) => x.sales);
+  });
+
+  return {
+    stores,
+    models,
+    wsEvents,
+    computedByStores,
+    bestPerformerStore,
+    bestPerformerModel,
+    ChartStorePerfData,
+    bestModelByStores,
+    storesOrderedBySales,
+  };
 });

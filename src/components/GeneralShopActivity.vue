@@ -1,11 +1,11 @@
 <script setup>
-import { useMainStore } from "src/stores/main-store";
+import { useShoeStore } from "src/stores/shoes-store";
 
-const mainStore = useMainStore();
+const shoeStore = useShoeStore();
 </script>
 <template>
   <div class="row q-mt-none q-col-gutter-md">
-    <div class="col-3" v-for="store in mainStore.shoeStores" :key="store.id">
+    <div class="col-3" v-for="(store, idx) in shoeStore.stores" :key="idx">
       <q-card>
         <q-card-section>
           <q-btn
@@ -18,15 +18,30 @@ const mainStore = useMainStore();
           >
             <q-tooltip>Détails pour ce magasin</q-tooltip>
           </q-btn>
-          <p class="fw-800 q-my-none text-grey-7">
-            {{ store.name }}
+          <p class="fw-800 q-my-none text-accent text-body1 lhn">
+            {{ store }}
           </p>
 
           <p class="q-my-none">
-            Nombre total de ventes : <span class="fw-700 text-primary">42</span>
+            Nombre total de ventes :
+            <span class="fw-700 text-primary">
+              {{
+                shoeStore.ChartStorePerfData.find((x) => x.name === store)
+                  ? shoeStore.ChartStorePerfData.find((x) => x.name === store)
+                      .sales
+                  : 0
+              }}
+            </span>
           </p>
           <p class="q-my-none">
-            Meilleur modèle : <span class="fw-700 text-primary">CADAUDIA</span>
+            Meilleur modèle :
+            <span class="fw-700 text-primary">
+              {{
+                shoeStore.bestModelByStores[store].salesCount
+                  ? shoeStore.bestModelByStores[store].name
+                  : "N/A"
+              }}
+            </span>
           </p>
         </q-card-section>
       </q-card>

@@ -1,5 +1,8 @@
 <script setup>
 import { useShoeStore } from "src/stores/shoes-store";
+import PieChartStorePerfs from "src/components/dashboard/PieChartStorePerfs.vue";
+import PieChartLegend from "src/components/dashboard/PieChartLegend.vue";
+import BarChartStorePerfs from "src/components/dashboard/BarChartStorePerfs.vue";
 
 const shoeStore = useShoeStore();
 const props = defineProps({ wsEvents: Array });
@@ -15,7 +18,7 @@ const props = defineProps({ wsEvents: Array });
                 Nombre de ventes enregistrées
               </p>
               <p
-                class="big-numbers lhn q-my-none fw-600 q-my-none text-dark text-center"
+                class="big-numbers lhn q-my-none fw-600 q-my-none text-primary text-center"
               >
                 {{ wsEvents.length }}
               </p>
@@ -30,7 +33,7 @@ const props = defineProps({ wsEvents: Array });
           <q-card class="fit"
             ><q-card-section class="text-center">
               <p class="text-caption q-my-none">Magasin le plus performant</p>
-              <p class="fw-700 text-accent q-mb-none text-body1">
+              <p class="fw-700 text-accent q-mb-none text-h5 q-mt-xs">
                 {{ shoeStore.bestPerformerStore?.name }} ({{
                   shoeStore.bestPerformerStore?.sales
                 }})
@@ -42,7 +45,7 @@ const props = defineProps({ wsEvents: Array });
           <q-card class="fit"
             ><q-card-section class="text-center">
               <p class="text-caption q-my-none">Modèle le plus performant</p>
-              <p class="fw-700 text-accent q-mb-none text-body1">
+              <p class="fw-700 text-accent q-mb-none text-h5 q-mt-xs">
                 {{ shoeStore.bestPerformerModel?.name }} ({{
                   shoeStore.bestPerformerModel?.sales
                 }})
@@ -53,37 +56,19 @@ const props = defineProps({ wsEvents: Array });
       </div>
     </div>
     <div class="col-6">
-      <div class="column fit">
-        <div class="col-6 q-pb-sm">
-          <q-card class="fit"
-            ><q-card-section>
-              <p class="text-caption q-my-none text-center">
-                Stock le plus haut (10 derniers events)
-              </p>
-              <p
-                class="fw-700 text-positive q-mb-none text-body1 text-center"
-              ></p>
-            </q-card-section>
-          </q-card>
-        </div>
-        <div class="col-6 q-pt-sm">
-          <q-card class="fit"
-            ><q-card-section>
-              <p class="text-caption q-my-none text-center">
-                Stock le plus bas (10 derniers events)
-              </p>
-              <p
-                class="fw-700 text-negative q-mb-none text-body1 text-center"
-              ></p>
-            </q-card-section>
-          </q-card>
-        </div>
-      </div>
+      <q-card>
+        <q-card-section>
+          <p class="text-caption q-my-none q-mb-sm text-center">
+            Répartition des ventes
+          </p>
+          <BarChartStorePerfs class="q-mx-md" />
+        </q-card-section>
+      </q-card>
     </div>
   </div>
 </template>
 <style scoped>
 .big-numbers {
-  font-size: 5rem;
+  font-size: 7rem;
 }
 </style>

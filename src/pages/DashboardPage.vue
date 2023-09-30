@@ -2,6 +2,8 @@
 import { useShoeStore } from "src/stores/shoes-store";
 import CustomSeparator from "src/components/CustomSeparator.vue";
 import GeneralActivity from "src/components/GeneralActivity.vue";
+import GeneralShopActivity from "src/components/GeneralShopActivity.vue";
+import GeneralTop3Stores from "src/components/GeneralTop3Stores.vue";
 const shoeStore = useShoeStore();
 </script>
 <template>
@@ -9,9 +11,13 @@ const shoeStore = useShoeStore();
     <div class="full-width">
       <CustomSeparator :sep-title="'Activité générale'" />
       <GeneralActivity :ws-events="shoeStore.wsEvents" />
-      <pre>
-        {{ shoeStore.computedByStores }}
-      </pre>
+      <CustomSeparator :sep-title="'Vue générale par magasin'" />
+      <GeneralShopActivity />
+      <CustomSeparator :sep-title="'TOP 3 des magasins'" class="q-my-md" />
+      <GeneralTop3Stores />
+      <!-- <pre>
+        {{ shoeStore.bestModelByStores }}
+      </pre> -->
     </div>
   </q-page>
 </template>

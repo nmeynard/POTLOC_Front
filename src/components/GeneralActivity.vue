@@ -1,6 +1,7 @@
 <script setup>
 import { useMainStore } from "src/stores/main-store";
 import { storeToRefs } from "pinia";
+import PieChartStorePerfs from "src/components/dashboard/PieChartStorePerfs.vue";
 
 const mainStore = useMainStore();
 const props = defineProps({ wsEvents: Array });
@@ -51,7 +52,15 @@ const { bestStorePerformer, bestModelPerformer } = storeToRefs(mainStore);
         </div>
       </div>
     </div>
-    <div class="col-6">
+    <div class="col-3">
+      <q-card>
+        <q-card-section class="text-center">
+          <p class="text-caption q-my-none">Répartition des ventes</p>
+          <PieChartStorePerfs />
+        </q-card-section>
+      </q-card>
+    </div>
+    <!-- <div class="col-6">
       <div class="column fit">
         <div class="col-6 q-pb-sm">
           <q-card class="fit"
@@ -78,7 +87,7 @@ const { bestStorePerformer, bestModelPerformer } = storeToRefs(mainStore);
           </q-card>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 <style scoped>

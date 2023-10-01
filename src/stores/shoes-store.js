@@ -1,10 +1,11 @@
 import { defineStore } from "pinia";
-import { ref, onMounted, computed } from "vue";
+import { ref, computed } from "vue";
 import { useQuasar } from "quasar";
-import axios from "axios";
 
 export const useShoeStore = defineStore("shoe", () => {
   const $q = useQuasar();
+
+  const stockThreshold = ref(30);
 
   const stores = [
     "ALDO Centre Eaton",
@@ -41,6 +42,22 @@ export const useShoeStore = defineStore("shoe", () => {
     "GREG",
     "BOZZA",
   ];
+
+  const wsEvents = ref([]);
+
+  // connect to Websocket
+  const socket = new WebSocket("ws://127.0.0.1:8080");
+
+  socket.onmessage = function (event) {
+    wsEvents.value.push({ receivedAt: Date.now(), ...JSON.parse(event.data) });
+    $q.localStorage.set("ws-events", wsEvents.value);
+  };
+
+  socket.onerror = function (error) {
+    console.error("WebSocket Error", error);
+  };
+
+  // computed functions for frontend
 
   const computedByStores = computed(() => {
     const results = {};
@@ -83,24 +100,6 @@ export const useShoeStore = defineStore("shoe", () => {
     }
     return modelTemplate;
   }
-
-  const wsEvents = ref([]);
-
-  // connect to Websocket
-  const socket = new WebSocket("ws://127.0.0.1:8080");
-
-  socket.onmessage = function (event) {
-    wsEvents.value.push({ receivedAt: Date.now(), ...JSON.parse(event.data) });
-    console.log("Msg received", {
-      receivedAt: Date.now(),
-      ...JSON.parse(event.data),
-    });
-    $q.localStorage.set("ws-events", wsEvents.value);
-  };
-
-  socket.onerror = function (error) {
-    console.error("WebSocket Error", error);
-  };
 
   const storesOrderedBySales = computed(() => {
     const storeScoring = {};
@@ -162,5 +161,6 @@ export const useShoeStore = defineStore("shoe", () => {
     ChartStorePerfData,
     bestModelByStores,
     storesOrderedBySales,
+    stockThreshold,
   };
 });

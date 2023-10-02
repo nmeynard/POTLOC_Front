@@ -23,7 +23,7 @@ export const useMainStore = defineStore("main", () => {
   //   { channel: "WsEventsChannel" },
   //   {
   //     received(data) {
-  //       console.log("WsEvents received", data);
+  //       // console.log("WsEvents received", data);
   //       wsEvents.value.push(data);
   //     },
   //   }
@@ -32,30 +32,30 @@ export const useMainStore = defineStore("main", () => {
   async function getWsEvents() {
     try {
       const response = await axios.get(mainApiUrl + "ws_events.json");
-      console.log("getWsEvents", response.data);
+      // console.log("getWsEvents", response.data);
       wsEvents.value = response.data;
     } catch (e) {
-      console.log("error getWsEvents", e);
+      // console.log("error getWsEvents", e);
     }
   }
 
   async function getShoeStores() {
     try {
       const response = await axios.get(mainApiUrl + "shoe_stores.json");
-      console.log("getShoeStores", response.data);
+      // console.log("getShoeStores", response.data);
       shoeStores.value = response.data;
     } catch (e) {
-      console.log("error getShoeStores", e);
+      // console.log("error getShoeStores", e);
     }
   }
 
   async function getShoeModels() {
     try {
       const response = await axios.get(mainApiUrl + "shoe_models.json");
-      console.log("getShoeModels", response.data);
+      // console.log("getShoeModels", response.data);
       shoeModels.value = response.data;
     } catch (e) {
-      console.log("error getShoeModels", e);
+      // console.log("error getShoeModels", e);
     }
   }
 
@@ -125,8 +125,8 @@ export const useMainStore = defineStore("main", () => {
         .slice(0, 10);
       const higherStock = last10.sort((a, b) => b.qty_left - a.qty_left)[0];
       const lowerStock = last10.sort((a, b) => a.qty_left - b.qty_left)[0];
-      console.log("higherStock", higherStock);
-      console.log("lowerStock", lowerStock);
+      // console.log("higherStock", higherStock);
+      // console.log("lowerStock", lowerStock);
       result.higher = `${higherStock.qty_left} ${
         shoeModels.value.find(
           (x) => x.id === parseInt(higherStock.shoe_model_id)
@@ -155,7 +155,7 @@ export const useMainStore = defineStore("main", () => {
     await getWsEvents();
   });
 
-  setTimeout(console.log("salesByStores", salesByStores.value), 5000);
+  setTimeout(// console.log("salesByStores", salesByStores.value), 5000);
 
   return {
     shoeStores,

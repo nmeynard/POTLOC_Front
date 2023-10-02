@@ -1,7 +1,5 @@
 <script setup>
 import { useShoeStore } from "src/stores/shoes-store";
-import PieChartStorePerfs from "src/components/dashboard/PieChartStorePerfs.vue";
-import PieChartLegend from "src/components/dashboard/PieChartLegend.vue";
 import BarChartStorePerfs from "src/components/dashboard/BarChartStorePerfs.vue";
 
 const shoeStore = useShoeStore();

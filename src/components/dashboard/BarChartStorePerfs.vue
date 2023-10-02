@@ -21,7 +21,7 @@ onMounted(() => {
   const element = document.getElementById("chart-wrapper");
   if (element) {
     width.value = element.offsetWidth;
-    console.log("width value", width.value);
+    // console.log("width value", width.value);
   }
 });
 </script>

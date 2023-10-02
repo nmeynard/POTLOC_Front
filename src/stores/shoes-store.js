@@ -62,7 +62,6 @@ export const useShoeStore = defineStore("shoe", () => {
   const computedByStores = computed(() => {
     const results = {};
     for (const store of stores) {
-      // apply default values
       results[store] = parseResults(store);
     }
     return results;

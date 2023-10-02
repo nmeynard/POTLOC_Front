@@ -4,6 +4,36 @@ import { useShoeStore } from "src/stores/shoes-store";
 const shoeStore = useShoeStore();
 </script>
 <template>
+  <div class="row q-col-gutter-md">
+    <div class="col-6">
+      <q-card class="bg-negative text-white">
+        <q-item>
+          <q-item-section avatar>
+            <q-icon name="arrow_back_ios" />
+          </q-item-section>
+          <q-item-section>
+            <p class="text-h6 fw-700 q-my-sm">
+              Évènements sous le seuil ({{ shoeStore.stockThreshold }})
+            </p>
+          </q-item-section>
+        </q-item>
+      </q-card>
+    </div>
+    <div class="col-6">
+      <q-card class="bg-positive text-white">
+        <q-item>
+          <q-item-section>
+            <p class="text-h6 fw-700 q-my-sm text-right">
+              Évènements au-dessus du seuil
+            </p>
+          </q-item-section>
+          <q-item-section avatar>
+            <q-icon name="arrow_forward_ios" />
+          </q-item-section>
+        </q-item>
+      </q-card>
+    </div>
+  </div>
   <q-timeline color="accent" layout="loose">
     <q-timeline-entry
       v-for="(event, idx) in shoeStore.wsEvents

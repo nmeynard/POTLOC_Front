@@ -11,12 +11,13 @@ const shoeStore = useShoeStore();
           <q-btn
             class="float-right"
             round
-            icon="zoom_in"
+            icon="trending_up"
             outline
             color="accent"
             size="sm"
+            to="stats"
           >
-            <q-tooltip>Détails pour ce magasin</q-tooltip>
+            <q-tooltip>Statistiques</q-tooltip>
           </q-btn>
           <p class="fw-800 q-my-none text-accent text-body1 lhn">
             {{ store }}

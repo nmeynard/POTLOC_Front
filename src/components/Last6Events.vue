@@ -1,7 +1,8 @@
 <script setup>
 import { useShoeStore } from "src/stores/shoes-store";
-import { date } from "quasar";
+import { date, useQuasar } from "quasar";
 const shoeStore = useShoeStore();
+const $q = useQuasar();
 </script>
 <template>
   <div class="row q-col-gutter-md">
@@ -14,15 +15,21 @@ const shoeStore = useShoeStore();
     >
       <q-card>
         <q-card-section>
-          <p class="text-overline q-my-none">
+          <p class="text-overline q-my-none fw-300 lhn">
             {{
               date.formatDate(new Date(event.receivedAt), "YYYY/MM/DD HH:mm:ss")
             }}
           </p>
-          <p class="text-body1 q-my-none lhn text-accent">
+          <p
+            class="q-my-none lhn text-accent"
+            :class="$q.screen.gt.lg ? 'text-body1' : 'text-caption'"
+          >
             {{ event.store }}
           </p>
-          <p class="text-h6 q-my-none lhn text-primary fw-900">
+          <p
+            class="q-my-none lhn text-primary fw-900"
+            :class="$q.screen.gt.lg ? 'text-h6' : 'text-body1'"
+          >
             {{ event.model }}
           </p>
           <span

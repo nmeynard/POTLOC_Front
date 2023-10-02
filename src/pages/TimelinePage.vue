@@ -9,7 +9,7 @@ const shoeStore = useShoeStore();
 <template>
   <q-page class="q-pa-md">
     <CustomSeparator
-      :sep-title="`6 dernieres ventes (total : ${shoeStore.wsEvents.length})`"
+      :sep-title="`6 dernières ventes (total : ${shoeStore.wsEvents.length})`"
       class="q-mb-md"
     />
     <Last6Events />
